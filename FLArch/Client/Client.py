@@ -122,7 +122,7 @@ class Client:
             global_model:torch.nn.Module
     ):
         local_model = LocalUpdate(args=args, dataset=self.clientDataset,
-                                  idxs=self.clientDataset)
+                                  idxs=self.datasetIndexList)
         w, loss = local_model.update_weights(
             model=copy.deepcopy(global_model), global_round=epoch)
         return self.localUpdatePruning(copy.deepcopy(w)), copy.deepcopy(loss)
