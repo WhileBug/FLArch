@@ -22,6 +22,8 @@ class FLArgs:
     num_classes=10
     num_channels=1
 
+    gpu = 'cuda'
+
 def get_mnist_dataset():
     data_tf = transforms.Compose(
         [transforms.ToTensor(),
