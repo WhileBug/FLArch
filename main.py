@@ -65,7 +65,7 @@ if __name__ == '__main__':
         dataset=train_dataset,
         globalModel=cnnmnist,
         clients=clients,
-        device='cuda'
+        device=fl_args.gpu
     )
     for epoch in range(EPOCH_NUM):
         fl_server.getLocalUpdates(
