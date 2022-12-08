@@ -37,8 +37,7 @@ class Server:
     def getLocalUpdates(
             self,
             args,
-            epoch:int,
-            participantsNum:int
+            epoch:int
     ):
         local_weights, local_losses = [], []
         print(f'\n | Global Training Round : {epoch + 1} |\n')
