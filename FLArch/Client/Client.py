@@ -125,4 +125,10 @@ class Client:
                                   idxs=self.clientDataset)
         w, loss = local_model.update_weights(
             model=copy.deepcopy(global_model), global_round=epoch)
-        return copy.deepcopy(w), copy.deepcopy(loss)
+        return self.localUpdatePruning(copy.deepcopy(w)), copy.deepcopy(loss)
+
+    def localUpdatePruning(
+            self,
+            weightUpdate
+    ):
+        return weightUpdate
