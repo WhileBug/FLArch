@@ -3,6 +3,7 @@ from FLArch.Client.Client import Client
 from FLArch.Server.Server import Server
 from FLArch.Model.Model import CNNMnist
 import numpy as np
+import torch
 
 CLIENT_NUM = 10
 EPOCH_NUM = 10
