@@ -53,7 +53,7 @@ if __name__ == '__main__':
     user_groups = mnist_iid(train_dataset, CLIENT_NUM)
     fl_args = FLArgs()
     cnnmnist = CNNMnist(fl_args)
-    cnnmnist = cnnmnist.to(torch.device('cuda'))
+    cnnmnist = cnnmnist.to(torch.device(fl_args.gpu))
     clients = []
     for i in range(CLIENT_NUM):
         fl_client = Client(
