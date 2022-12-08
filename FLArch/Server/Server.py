@@ -5,7 +5,7 @@ from torchvision import datasets
 import copy
 from FLArch.Client import Client
 import numpy as np
-from AggregationAlgo import AggregationAlgo
+from FLArch.Server.AggregationAlgo import AggregationAlgo
 
 class Server:
     def __init__(
@@ -44,7 +44,7 @@ class Server:
         self.globalModel.train()
         participants = self.clientSelect()
         for participant in participants:
-            localWeightUpdate, localLoss = participant.LocalUpdate(
+            localWeightUpdate, localLoss = participant.localUpdate(
                 args=args,
                 epoch=epoch,
                 global_model=self.globalModel
