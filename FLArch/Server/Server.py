@@ -6,6 +6,7 @@ import copy
 from FLArch.Client import Client
 import numpy as np
 from FLArch.Server.AggregationAlgo import AggregationAlgo
+from FLArch.Utlis.test import test_img
 
 class Server:
     def __init__(
@@ -37,7 +38,9 @@ class Server:
     def getLocalUpdates(
             self,
             args,
-            epoch:int
+            epoch:int,
+            dataset_train,
+            dataset_test
     ):
         local_weights, local_losses = [], []
         print(f'\n | Global Training Round : {epoch + 1} |\n')
@@ -56,3 +59,8 @@ class Server:
         global_weights = aggregationAlgo.average_weights(local_weights)
         # update global weights
         self.globalModel.load_state_dict(global_weights)
+
+        acc_train, loss_train = test_img(self.globalModel, dataset_train)
+        acc_test, loss_test = test_img(self.globalModel, dataset_test)
+        print("Global Round {:3d},Training accuracy: {:.2f}".format(epoch, acc_train))
+        print("Global Testing accuracy: {:.2f}".format(acc_test))
