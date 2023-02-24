@@ -5,8 +5,10 @@ from FLArch.Model.Model import CNNMnist
 import numpy as np
 import torch
 
-CLIENT_NUM = 10
-EPOCH_NUM = 10
+class FLConfig:
+    num_sample_per_client = 1000
+    num_clients = 10
+    epoch_num = 100
 
 class FLArgs:
     local_bs = 10
@@ -15,7 +17,7 @@ class FLArgs:
     local_ep=10
     verbose=True
 
-    num_classes=10
+    num_classes=10 # how many classes are in current task
     num_channels=1
 
     gpu = 'cuda'
@@ -32,14 +34,14 @@ def get_mnist_dataset():
 
     return train_dataset, test_dataset
 
-def mnist_iid(dataset, num_users):
+def mnist_iid(dataset, num_users, num_items):
     """
     Sample I.I.D. client data from MNIST dataset
     :param dataset:
     :param num_users:
     :return: dict of image index
     """
-    num_items = int(len(dataset)/num_users)
+    #num_items = int(len(dataset)/num_users)
     dict_users, all_idxs = {}, [i for i in range(len(dataset))]
     for i in range(num_users):
         dict_users[i] = set(np.random.choice(all_idxs, num_items,
@@ -50,12 +52,12 @@ def mnist_iid(dataset, num_users):
 if __name__ == '__main__':
     train_dataset, test_dataset = get_mnist_dataset()
 
-    user_groups = mnist_iid(train_dataset, CLIENT_NUM)
+    user_groups = mnist_iid(train_dataset, FLConfig.num_clients, FLConfig.num_sample_per_client)
     fl_args = FLArgs()
     cnnmnist = CNNMnist(fl_args)
     cnnmnist = cnnmnist.to(torch.device(fl_args.gpu))
     clients = []
-    for i in range(CLIENT_NUM):
+    for i in range(FLConfig.num_clients):
         fl_client = Client(
             clientDataset=train_dataset,
             datasetIndexList=user_groups[i]
@@ -67,7 +69,7 @@ if __name__ == '__main__':
         clients=clients,
         device=fl_args.gpu
     )
-    for epoch in range(EPOCH_NUM):
+    for epoch in range(FLConfig.epoch_num):
         fl_server.getLocalUpdates(
             args=fl_args,
             epoch=epoch
